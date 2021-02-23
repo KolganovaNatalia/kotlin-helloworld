@@ -1,24 +1,58 @@
-import org.jetbrains.kotlin.resolve.sam.recreateAndInitializeTypeParameters
+import java.math.MathContext
+import java.math.RoundingMode
+import java.math.BigDecimal
 
 fun main(args: Array<String>) {
-   println("1.Какая часть Света объединяет два материка? Введите номер правильного ответа и нажмите Enter. 1.Евразия 2.Америка")
-   val Answer1: Char = '1'
-   val userNumber: String? = readLine()
-   println("2.Назовите самое глубокое озеро на планете? Введите номер правильного ответа и нажмите Enter. 1.Байкал 2.Титикака")
-   val Answer2: Char = '1'
-   val userNumber1: String? = readLine()
-   println("3.Назовите самую длинную реку Африки? Введите букву номер ответа и нажмите Enter. 1.Нил 2.Конго")
-   val Answer3: Char = '1'
-   val userNumber2: String? = readLine()
-   println("4.Какая из перечисленных мировых столиц не относится к Европе? Введите номер правильного ответа и нажмите Enter. 1.Лусака 2.Скопье")
-   val Answer4: Char = '1'
-   val userNumber3: String? = readLine()
-   println("5.Назовите самую большую по территории страну Африки? Введите номер правильного ответа и нажмите Enter. 1.Алжир 2.Судан")
-   val Answer5: Char = '1'
-   val userNumber4: String? = readLine()
-   when (userNumber) {
-      "1" -> println("Ваши знания географии впечатляют!")
-      else -> println("Вы не очень хорошо разбираетесь в географии!")
-}
-}
 
+   /**
+    * Read input value converted to demanded type.
+    */
+   fun <T> input(msg: String, conversion: String.() -> T): T {
+      println(msg)
+      val value = readLine()
+      if (value.isNullOrEmpty())
+         throw IllegalArgumentException("Значение должно быть введено")
+      return value.conversion()
+   }
+
+   /**
+    * Check input value.
+    */
+   fun check(msg: String, condition: Boolean) {
+      if (!condition)
+         throw IllegalArgumentException(msg)
+      return
+   }
+
+   val SCALE = 2
+
+   val sum: BigDecimal = input("Введите сумму вклада и нажмите Enter") {
+      toBigDecimal().setScale(SCALE, RoundingMode.HALF_UP)
+   }
+   check("Сумма не может быть меньше или равна нулю", sum > BigDecimal.ZERO)
+
+   val month: Int = input("Введите длительность вклада (количество месяцев) и нажмите Enter") {
+      toInt()
+   }
+   check("Количество месяцев не может быть меньше одного", month >= 1)
+
+   val percent: BigDecimal = input("Введите ежемесячный процент по вкладу и нажмите Enter") {
+      toBigDecimal().setScale(SCALE, RoundingMode.HALF_UP)
+   }
+   check("Процент не может быть меньше или равен нулю", percent > BigDecimal.ZERO)
+
+
+   var previousSum = sum
+   println("-----------------------------------------------")
+   for (index in 1..month) {
+      println("Месяц: $index")
+
+      val overallSum = previousSum * (BigDecimal.ONE + percent / BigDecimal.valueOf(100))
+      val incrementSum = overallSum - previousSum
+      previousSum = overallSum
+
+      println("Приращение: ${incrementSum.setScale(SCALE, RoundingMode.HALF_UP)}")
+      println("Общая сумма: ${overallSum.setScale(SCALE, RoundingMode.HALF_UP)}")
+      println("-----------------------------------------------")
+   }
+}
