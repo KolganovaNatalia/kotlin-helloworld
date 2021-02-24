@@ -1,18 +1,16 @@
 
+
 fun main(args: Array<String>){
-    val cities : MutableList<String> = mutableListOf("Москва", "Мадрид", "Париж");
-  println("Добавьте название города и нажмите Enter для просмотра всех добавленных городов")
+    val place: Map<Int, String> = mapOf(1 to "Иванов Иван Иванович", 2 to "Петров Петр Петрович", 3 to "Васильев Василий Васильевич")
+    println ("Для получения информации о том, кто из сотрудников какое рабочее место занимает, нажмите Enter.")
     val userText: String? = readLine()
     userText.toString()
-    if (userText.isNullOrEmpty())
-        throw IllegalArgumentException("Значение должно быть введено")
-    cities.add("$userText")
-       println(cities)
-    println("Для просмотра добавленных городов без повторений нажмите Enter.")
-    val userText1: String? = readLine()
-    userText1.toString()
-    println("$userText")
-    println("Для выхода из программы нажмите Enter.")
-    val userText2: String? = readLine()
-    userText2.toString()
+   for((key, value) in place){
+    println("Рабочее место $key, сотрудник $value")
+    }
 }
+
+
+
+
+
