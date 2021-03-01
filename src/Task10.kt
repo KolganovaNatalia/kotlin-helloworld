@@ -81,7 +81,7 @@ fun main(args: Array<String>) {
     val delimiter: () -> Unit = { println("---------------------------------------\n\n") }
 
     val cities = Cities()
-    val executableActions = mapOf<Action, () -> Unit>(
+    val executableActions = mapOf(
         Action.EXIT to fun() {
             println("Пока пока!")
             exitProcess(0)
